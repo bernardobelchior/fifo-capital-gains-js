@@ -1,0 +1,137 @@
+{
+  "name": "fifo-capital-gains-js",
+  "version": "0.0.0",
+  "description": "Calculate your FIFO capital gains for tax-purposes",
+  "keywords": [
+    "finance",
+    "capital gains",
+    "fifo"
+  ],
+  "main": "./bundles/index.umd.js",
+  "module": "./esm5/index.js",
+  "es2015": "./esm2015/index.js",
+  "typings": "./types/index.d.ts",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bernardobelchior/fifo-capital-gains-js"
+  },
+  "author": "Bernardo Belchior <bernardo.belchior1@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=8.5",
+    "npm": ">=6.0"
+  },
+  "scripts": {
+    "prebuild": "npm run verify",
+    "build": "tsc && tsc --target es2018 --outDir dist/esm2015 && rollup -c config/rollup.config.js && rollup -c config/rollup.config.js --environment NODE_ENV:production",
+    "postbuild": "node scripts/copy && npm run size",
+    "test": "jest",
+    "test:watch": "npm t -- --watch",
+    "test:coverage": "npm t -- --coverage",
+    "test:ci": "npm t -- --ci",
+    "validate-js": "tsc -p ./config",
+    "verify": "npm run validate-js && npm run style && npm run test:ci",
+    "commit": "git-cz",
+    "style": "npm run format -- --list-different && npm run lint",
+    "style:fix": "npm run format:fix && npm run lint:fix",
+    "format": "prettier \"**/*.{ts,js}\"",
+    "format:fix": "npm run format -- --write",
+    "lint": "tslint --project tsconfig.json --format codeFrame",
+    "lint:fix": "npm run lint -- --fix",
+    "prerelease": "npm run build",
+    "release": "standard-version",
+    "postrelease": "node scripts/copy && node scripts/build && npm run release:github && npm run release:npm",
+    "release:github": "git push --no-verify --follow-tags origin master",
+    "release:npm": "npm publish dist",
+    "release:preflight": "npm pack ./dist --dry-run",
+    "size": "node scripts/file-size ./dist/bundles/index.umd.min.js ./dist/bundles/index.esm.min.js"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint --config config/commitlint.config.js -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run style && npm test -- --bail --onlyChanged"
+    }
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx,js,jsx,css,scss,sass,less,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "src/**/*.{ts,tsx}": [
+      "npm run lint:fix",
+      "git add"
+    ]
+  },
+  "peerDependencies": {
+    "tslib": ">=1.9.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@types/jest": "^25.2.2",
+    "@types/node": "^14.0.1",
+    "@types/prettier": "^2.0.0",
+    "@types/webpack-config-utils": "^2.3.0",
+    "brotli-size": "^4.0.0",
+    "commitizen": "^4.1.2",
+    "cross-var": "^1.1.0",
+    "cz-conventional-changelog": "^3.2.0",
+    "gzip-size": "^5.1.1",
+    "husky": "^4.2.5",
+    "jest": "^25.0.1",
+    "jest-watch-typeahead": "^0.6.0",
+    "kleur": "^3.0.3",
+    "lint-staged": "^10.2.2",
+    "prettier": "^2.0.5",
+    "pretty-bytes": "5.3.0",
+    "rollup": "^0.68.2",
+    "rollup-plugin-commonjs": "9.3.4",
+    "rollup-plugin-json": "^3.1.0",
+    "rollup-plugin-node-resolve": "4.2.4",
+    "rollup-plugin-replace": "2.2.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-terser": "^3.0.0",
+    "rollup-plugin-uglify": "6.0.4",
+    "shx": "^0.3.2",
+    "standard-version": "^8.0.0",
+    "ts-jest": "^25.5.1",
+    "tslib": "^2.0.0",
+    "tslint": "^6.1.2",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-config-standard": "^9.0.0",
+    "tslint-etc": "^1.10.1",
+    "typescript": "^3.9.0",
+    "typescript-tslint-plugin": "^0.5.5",
+    "webpack-config-utils": "^2.3.1"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.ts",
+      "<rootDir>/src/**/?(*.)+(spec|test).ts"
+    ],
+    "testPathIgnorePatterns": [
+      "dist"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    },
+    "watchPlugins": [
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
+    ]
+  }
+}
