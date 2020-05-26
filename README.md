@@ -315,6 +315,61 @@ const capitalGainsByYear = aggregateByYear(capitalGains)
 // }
 ```
 
+### `calculateSalesForNetWithdrawal(history: Operation[], options: NetSalesOptions): Operation[]`
+
+This method calculates the sales required to obtain a withdrawal amount set, given the history of purchases and sales and some settings.
+
+```ts
+const history: Operation[] = [
+  {
+    amount: 10,
+    date: new Date('2020-01-01'),
+    price: 100,
+    symbol: 'STK1',
+    type: 'BUY',
+  },
+  {
+    amount: 10,
+    date: new Date('2021-01-01'),
+    price: 200,
+    symbol: 'STK2',
+    type: 'BUY',
+  },
+  {
+    amount: 10,
+    date: new Date('2021-01-01'),
+    price: 200,
+    symbol: 'STK1',
+    type: 'BUY',
+  },
+]
+
+const options: NetSalesOptions = {
+  netWithdrawal: 4000,
+  capitalGainsTax: 0.5,
+  date: new Date('2022-01-01'),
+  prices: { STK1: 300, STK2: 600 },
+}
+
+const sales = calculateSalesForNetWithdrawal(history, options))
+// [
+//   {
+//     amount: 10,
+//     date: new Date('2022-01-01'),
+//     price: 300,
+//     symbol: 'STK1',
+//     type: 'SELL',
+//   },
+//   {
+//     amount: 5,
+//     date: new Date('2022-01-01'),
+//     price: 600,
+//     symbol: 'STK2',
+//     type: 'SELL',
+//   },
+// ])
+```
+
 ## 🥂 License
 
 [MIT](./LICENSE.md) as always

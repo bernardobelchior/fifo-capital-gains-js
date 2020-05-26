@@ -5,7 +5,7 @@ const readFile = promisify(readFileCb)
 
 const kolor = require('kleur')
 const prettyBytes = require('pretty-bytes')
-const brotliSize = require('brotli-size')
+const brotliSize = require('brotli-size').default
 const gzipSize = require('gzip-size')
 const { log } = console
 const pkg = require('../package.json')
