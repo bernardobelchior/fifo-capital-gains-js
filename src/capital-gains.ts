@@ -62,9 +62,9 @@ function calculateCapitalGainsForSale(
       capitalGains += amountSold * (sale.price - buy.price)
     })
 
-  if (sale.amount > 0) {
+  if (Math.round(sale.amount, 4) > 0) {
     throw Error(
-      `Amount of sales for symbol ${sale.symbol} exceeds the amount of buys.`
+      `Amount of sales for symbol ${sale.symbol} exceeds the amount of buys by ${sale.amount}`
     )
   }
 
